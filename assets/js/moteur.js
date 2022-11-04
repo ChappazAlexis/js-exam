@@ -27,11 +27,14 @@ var selectedHTMLClasses;
 
 // Test si la case est vide
 // @param isEmpty 
-function isCaseEmpty(isEmpty) {
-    if(isEmpty == false) {
-        //console.log('vide')
+function isCaseEmpty(selectedHTMLClasses) {
+    let test = getCaseClass(selectedHTMLClasses);
+    let result;
+    console.log(getCaseClass(selectedHTMLClasses))
+    if(test == "") {
+        return false
     } else {
-        //console.log('plein')
+        return true
     }
 }
 
@@ -49,12 +52,8 @@ function getCaseClass(selectedClasses) {
     if (selectedClasses !== "") {
         var arraySplitedClasses = selectedClasses.split(" ");
         if (arraySplitedClasses.length > 1) {
-            let isEmpty = true
-            isCaseEmpty(isEmpty)
             return arraySplitedClasses[1];
         } else {
-            let isEmpty = false
-            isCaseEmpty(isEmpty)
             return "";
         }
     }
@@ -115,20 +114,29 @@ var play = function() {
         if(isCaseAllowed(selectedHTMLClasses)==true) {
             currentSelection = true;
             addSelectedClassByPlayer(this.classList);
-        }
+        } 
     } else {
         if (selectedHTML == this) {
             removeSelectedClassByPlayer(this.classList)
             currentSelection = false;
+        } 
+
+        if (currentPlayer == 1) {
+            this.classList.remove("pion-noir", "roi-noir", "reine-noir", "cavalier-noir", "fou-noir", "tour-noir")
+        } else {
+            this.classList.remove("pion-blanc", "roi-blanc", "reine-blanc", "cavalier-blanc", "fou-blanc", "tour-blanc")
         }
         
-
-        currentSelection = false;
+        var classPiece = getCaseClass(selectedHTMLClasses);
+        selectedHTML.classList.remove(classPiece, "selectedRed", "selectedBlue")
+        this.classList.add(classPiece)
         
-        isCaseEmpty(selectedHTML);
+        currentSelection = false;
+
         changePlayer()
     }
 };
+
 
 
 function getElementsChildren() {
@@ -255,10 +263,8 @@ function isCaseAllowed (selectedHTMLClasses) {
 let testCase = getCaseClass(selectedHTMLClasses)
 
     if (currentPlayer == 1) {
-        // console.log('J1 doit jouer')
         return (arrayPlayer1Pieces.includes(testCase))
     } else {
-        // console.log('J2 doit jouer')
         return (arrayPlayer2Pieces.includes(testCase))
     }
 }
